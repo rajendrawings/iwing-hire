@@ -2,6 +2,8 @@
 
 sed -i 's/\[]/\["54.144.250.113"]/' /home/ubuntu/iwinghire/iwinghire/settings.py
 
+mkdir ./static
+
 python manage.py migrate 
 python manage.py makemigrations     
 python manage.py collectstatic
