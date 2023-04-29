@@ -10,7 +10,7 @@ source /home/ubuntu/env/bin/activate
 
 pip install gunicorn
 
-cd iwing-hire
+cd iwinghire
 
 pip install -r requirements.txt
 

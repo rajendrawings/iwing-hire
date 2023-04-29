@@ -1,5 +1,5 @@
-sudo cp /home/ubuntu/iwing-hire/gunicorn/gunicorn.socket /etc/systemd/system/gunicorn.socket
-sudo cp /home/ubuntu/iwing-hire/gunicorn/gunicorn.service /etc/systemd/system/gunicorn.service
+sudo cp /home/ubuntu/iwinghire/gunicorn/gunicorn.socket /etc/systemd/system/gunicorn.socket
+sudo cp /home/ubuntu/iwinghire/gunicorn/gunicorn.service /etc/systemd/system/gunicorn.service
 
 sudo systemctl daemon-reload
 
