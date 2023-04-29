@@ -6,7 +6,11 @@ After=network.target
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/iwinghire
-ExecStart=/home/ubuntu/env/bin/gunicorn --access-logfile - --workers 3 --bind unix:/run/gunicorn.sock iwinghire.wsgi:application
+ExecStart=/home/ubuntu/env/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          iwinghire.wsgi:application
 
        
 [Install]
