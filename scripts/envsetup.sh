@@ -16,6 +16,10 @@ cd iwinghire
 
 pip install -r requirements.txt
 
+sudo apt-get install python3-dev default-libmysqlclient-dev build-essential
+
+pip install mysqlclient
+
 sudo service nginx stop
 
 sudo service nginx start
