@@ -8,6 +8,8 @@ python3 -m venv env
 
 source /home/ubuntu/env/bin/activate
 
+pip install django gunicorn
+
 pip install gunicorn
 
 cd iwinghire
