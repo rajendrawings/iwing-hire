@@ -74,16 +74,16 @@ WSGI_APPLICATION = 'iwinghire.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'iwinghire',
-        'USER': 'root',
-        'PASSWORD': 'admin',
-        'HOST':'localhost',
-        'PORT':'3306',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'iwinghire',
+#         'USER': 'root',
+#         'PASSWORD': 'iwinghire',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -92,16 +92,16 @@ DATABASES = {
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'usersDB', 
-#         'USER': 'sammy', 
-#         'PASSWORD': 'pa$$word',
-#         'HOST': '127.0.0.1', 
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'iwinghire', 
+        'USER': 'postgres', 
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
+    }
+}
 
 
 # Password validation
