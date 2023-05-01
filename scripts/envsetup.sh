@@ -17,6 +17,7 @@ cd iwinghire
 sudo mkdir ./static
 
 pip install -r requirements.txt
+pip install whitenoise
 
 python manage.py makemigrations
 python manage.py migrate
