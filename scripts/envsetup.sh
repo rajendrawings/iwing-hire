@@ -14,6 +14,8 @@ pip install gunicorn
 
 cd iwinghire
 
+mkdir ./static
+
 pip install -r requirements.txt
 
 python manage.py makemigrations
