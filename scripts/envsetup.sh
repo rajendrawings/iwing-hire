@@ -14,7 +14,7 @@ pip install gunicorn
 
 cd iwinghire
 
-mkdir ./static
+sudo mkdir ./static
 
 pip install -r requirements.txt
 
