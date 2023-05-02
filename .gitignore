@@ -1,4 +1,6 @@
 iwinghire/*__pycache__
+company/*__pycache__
+company/*migrations
 
 db.sqlite3
 
