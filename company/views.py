@@ -16,7 +16,7 @@ class CompanyListApiView(APIView):
         '''
         List all the company items for given requested user
         '''
-        companys = Company.objects.filter(user = request.user.id)
+        companys = Company.objects.all()
         serializer = CompanySerializer(companys, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
