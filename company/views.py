@@ -1,13 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
+
 from .models import Company
 from .serializers import CompanySerializer
 
 class CompanyListApiView(APIView):
-    # add permission to check if user is authenticated
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     # 1. List all
     def get(self, request, *args, **kwargs):
