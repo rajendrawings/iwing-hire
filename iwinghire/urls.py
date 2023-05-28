@@ -24,6 +24,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from django.urls import path, include
 from django.contrib import admin
 from company import urls as company_api
+from profiles import urls as profile_api
 
 
 
@@ -36,7 +37,8 @@ urlpatterns = [
     path('api/schema///', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/v1/', 
         include([
-            path('companys/', include(company_api)),
+            path('', include(company_api)),
+            path('', include(profile_api)),
         ])
     )
 ]

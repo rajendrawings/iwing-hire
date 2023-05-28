@@ -9,7 +9,7 @@ from .models import Company
 from .serializers import CompanySerializer
 
 class CompanyListApiView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [TokenAuthentication]
 
     # 1. List all
     def get(self, request, *args, **kwargs):
