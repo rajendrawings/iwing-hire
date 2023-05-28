@@ -57,7 +57,6 @@ class ProfileApiView(APIView):
     
 
 class RoleListApiView(APIView):
-    permission_classes = (IsAuthenticated,)
     serializer_class = RoleSerializer
 
     # 1. List all
@@ -69,14 +68,17 @@ class RoleListApiView(APIView):
         serializer = RoleSerializer(user_obj, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    # 2. Create Role
+
+class RoleApiView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = RoleSerializer
+
     def post(self, request, *args, **kwargs):
         '''
         Create Role
         '''
         role = request.data.get('role')
         if role:
-            # user_obj = Role.objects.create(role=role)
             data = {"role": role}
             serializer = RoleSerializer(data=data)
             if serializer.is_valid():
