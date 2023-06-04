@@ -1,13 +1,8 @@
 from rest_framework import serializers
-
-from .models import Profile, Role
+from .models import Profile, Hr, Candidate, CompanysCandidates
+from .common import create_user
+from company.serializers import CompanySerializer
 from django.contrib.auth.models import User
-
-
-class RoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Role
-        fields = ["id", "role"]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,41 +13,98 @@ class UserSerializer(serializers.ModelSerializer):
 
 class GetProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    role = RoleSerializer()
 
     class Meta:
         model = Profile
-        fields = ["user", "role"]
+        fields = ["user"]
+
+
+class GetHrSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    company = CompanySerializer()
+
+    class Meta:
+        model = Hr
+        fields = ["user", "company"]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     password = serializers.CharField()
+    confirm_password = serializers.CharField()
+    role = serializers.CharField()
+    company = serializers.IntegerField()
 
     def create(self, validated_data):
-        data = {
-            "username": validated_data.get("email", ""),
-            "email": validated_data.get("email", ""),
-            "password": validated_data.get("password", "")
-        }
 
-        password = validated_data.pop('password', None)
-        instance = User.objects.create(**data)
+        instance = create_user(validated_data)
         
-        # Adding the below line made it work for me.
-        instance.is_active = True
-        if password is not None:
-            # Set password does the hash, so you don't need to call make_password 
-            instance.set_password(password)
-        instance.save()
         if instance:
             profile_data = {
                 "user_id": instance.id,
-                "role": validated_data.get("role", "")
             }
             profile = Profile.objects.create(**profile_data)
         return instance
     
     class Meta:
         model = Profile
-        fields = ["email", "password", "role"]
+        fields = ["email", "password", "confirm_password", "role", "company"]
+
+
+class HrSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+    confirm_password = serializers.CharField()
+    role = serializers.CharField()
+    company = serializers.IntegerField()
+
+    def create(self, validated_data):
+
+        instance = create_user(validated_data)
+        
+        if instance:
+            hr_data = {
+                "user_id": instance.id,
+                "company_id": int(validated_data.get("company", ""))
+            }
+            hr = Hr.objects.create(**hr_data)
+        return instance
+    
+    class Meta:
+        model = Hr
+        fields = ["email", "password", "confirm_password", "role", "company"]
+
+
+class CandidateSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+    confirm_password = serializers.CharField()
+    role = serializers.CharField()
+    company = serializers.IntegerField()
+
+    def create(self, validated_data):
+
+        instance = create_user(validated_data)
+        
+        if instance:
+            candidate_data = {
+                "user_id": instance.id
+            }
+            candidate = Candidate.objects.create(**candidate_data)
+            company_candidate_obj = CompanysCandidates.objects.filter(company_id=int(validated_data.get("company", ""))).first()
+            if not company_candidate_obj:
+                company_candidate_obj = CompanysCandidates.objects.create(company_id=int(validated_data.get("company", "")))
+            company_candidate_obj.candidate.add(candidate)
+        return instance
+    
+    class Meta:
+        model = Candidate
+        fields = ["email", "password", "confirm_password", "role"]
+
+
+class GetCandidateSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Candidate
+        fields = ["user"]

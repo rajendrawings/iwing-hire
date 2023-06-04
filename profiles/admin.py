@@ -1,5 +1,7 @@
-from .models import Profile, Role
+from .models import Profile, Hr, Candidate, CompanysCandidates
 from django.contrib import admin
 
 admin.site.register(Profile)
-admin.site.register(Role)
+admin.site.register(Hr)
+admin.site.register(Candidate)
+admin.site.register(CompanysCandidates)
