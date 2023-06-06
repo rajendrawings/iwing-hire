@@ -99,7 +99,7 @@ class CandidateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Candidate
-        fields = ["email", "password", "confirm_password", "role"]
+        fields = ["email", "password", "confirm_password", "role", "company"]
 
 
 class GetCandidateSerializer(serializers.ModelSerializer):
