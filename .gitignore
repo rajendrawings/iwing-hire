@@ -1,8 +1,14 @@
 iwinghire/*__pycache__
 company/*__pycache__
 company/*migrations
+company/migrations
 profiles/*__pycache__
 profiles/*migrations
+task/*__pycache__
+task/*migrations
+
+media
+*media
 
 db.sqlite3
 
@@ -10,4 +16,5 @@ pipeline
 
 .DS_Store
 
-winghire/settings.py
+winghire/*settings
+winghire/settings
