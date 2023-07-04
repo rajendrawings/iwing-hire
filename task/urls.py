@@ -19,10 +19,6 @@ urlpatterns = [
     path('activity', ActivityApiView.as_view()),
     path('activity/<int:pk>', ActivityDetailApiView.as_view()),
 
-#Below urls for ActivityFiles
-    path('activityfile', ActivityFileApiView.as_view()),
-    path('activityfile/<int:pk>', ActivityFileDetailApiView.as_view()),
-
 
 
     #Below urls for Board.................

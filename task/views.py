@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from .models import Board
-from .serializers import BoardSerializer, CardSerializer, TaskSerializer, ActivitySerializer, ActivityFileSerializer
+from .serializers import BoardSerializer, CardSerializer, TaskSerializer, GetTaskSerializer, ActivitySerializer
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
@@ -13,7 +13,6 @@ from django.contrib.auth.models import User
 from .models import Card
 from.models import Task
 from.models import Activity
-from .models import ActivityFile
 
 #Board views
 class BoardApiView(APIView):
@@ -59,7 +58,6 @@ class BoardDetailApiView(APIView):
             try:
                 board = Board.objects.get(pk=pk)
             except:
-                print("Hello")
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
             if board:
@@ -165,8 +163,6 @@ class CardDetailApiView(APIView):
         return Response(status=status.HTTP_202_ACCEPTED)
 
 
-
-
 #Task views
 class TaskApiView(APIView):
     serializer_class = TaskSerializer
@@ -214,7 +210,7 @@ class TaskDetailApiView(APIView):
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
             if task:
-                serializer = TaskSerializer(task)
+                serializer = GetTaskSerializer(task)
                 return Response(serializer.data)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
@@ -242,8 +238,6 @@ class TaskDetailApiView(APIView):
         return Response(status=status.HTTP_202_ACCEPTED)
 
 
-
-
 #Activity views
 class ActivityApiView(APIView):
     serializer_class = ActivitySerializer
@@ -268,6 +262,11 @@ class ActivityApiView(APIView):
         '''
          Post  Activity data
          '''
+        data = {}
+        # data["file"] = request.dt
+        # data["task"] = request.data.task
+        # data["comment"] = request.data.comment
+
         activitys = ActivitySerializer(data=request.data)
         if activitys.is_valid():
             activitys.save()
@@ -318,79 +317,6 @@ class ActivityDetailApiView(APIView):
         activity.delete()
         return Response(status=status.HTTP_202_ACCEPTED)
 
-#ActivityFile views
-class ActivityFileApiView(APIView):
-    serializer_class = ActivityFileSerializer
-
-    def get(self, request , *args, **kwargs):
-        '''
-        get Activityfile list
-        '''
-        queryset = ActivityFile.objects.all()
-        if request.query_params:
-            activityfiles = ActivityFile.objects.filter(**request.query_params.dict())
-        else:
-            activityfiles = ActivityFile.objects.all()
-
-        if activityfiles:
-            serializer = ActivityFileSerializer(activityfiles, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def post(self, request, *args, **kwargs):
-        '''
-         Post  ActivityFile data
-         '''
-        activityfiles = ActivityFileSerializer(data=request.data)
-        if activityfiles.is_valid():
-            activityfiles.save()
-            return Response(activityfiles.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-class ActivityFileDetailApiView(APIView):
-    serializer_class = ActivityFileSerializer
-
-    def get(self, request, pk=None):
-        '''
-        get single ActivityFile
-        '''
-        if pk:
-            try:
-                activityfile = ActivityFile.objects.get(pk=pk)
-            except:
-                print("Error")
-                return Response(status=status.HTTP_404_NOT_FOUND)
-
-            if activityfile:
-                serializer = ActivityFileSerializer(activityfile)
-                return Response(serializer.data)
-            else:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def put(self, request, pk=None):
-        '''
-        update ActivityFile
-        '''
-        activityfile = ActivityFile.objects.get(pk=pk)
-        data = ActivityFileSerializer(instance=activityfile, data=request.data)
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-    def delete(self, request, pk=None):
-        '''
-        delete ActivityFile
-        '''
-        activityfile = get_object_or_404(ActivityFile, pk=pk)
-        activityfile.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
 
 
     
