@@ -43,39 +43,35 @@ class ProfileApiView(APIView):
             'email': request.data.get('email'), 
             'password': request.data.get('password'), 
             'confirm_password': request.data.get('confirm_password'),
-            'role': request.data.get('role').lower(),
-            'company': request.data.get('company'),
         }
         if data['password'] != data['confirm_password']:
             return Response({"Error": "Password fields didn't match"}, status=status.HTTP_400_BAD_REQUEST)
         
-        if data['role'] == "admin":
-            user_obj = User.objects.filter(Q(username=data["email"]) | Q(email=data["email"]))
-            if user_obj:
-                return Response({"Error": "Email already exits"}, status=status.HTTP_400_BAD_REQUEST)
-        
-            serializer = ProfileSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                profile_obj = Profile.objects.filter(Q(user__username=data["email"]) | Q(user__email=data["email"])).first()
-                profile_serializer = GetProfileSerializer(profile_obj,)
-                return Response(profile_serializer.data, status=status.HTTP_201_CREATED)
-        elif data['role'] == "hr":
+        user_obj = User.objects.filter(Q(username=data["email"]) | Q(email=data["email"]))
+        if user_obj:
+            return Response({"Error": "Email already exits"}, status=status.HTTP_400_BAD_REQUEST)
+    
+        serializer = ProfileSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            profile_obj = Profile.objects.filter(Q(user__username=data["email"]) | Q(user__email=data["email"])).first()
+            profile_serializer = GetProfileSerializer(profile_obj,)
+            return Response(profile_serializer.data, status=status.HTTP_201_CREATED)
             
-            company_obj = Company.objects.filter(id=data['company'])
-            if not company_obj:
-                return Response({"Error": "Company does not exists"}, status=status.HTTP_400_BAD_REQUEST)
+        #     company_obj = Company.objects.filter(id=data['company'])
+        #     if not company_obj:
+        #         return Response({"Error": "Company does not exists"}, status=status.HTTP_400_BAD_REQUEST)
             
-            user_obj = User.objects.filter(Q(username=data["email"]) | Q(email=data["email"]))
-            if user_obj:
-                return Response({"Error": "Email already exits"}, status=status.HTTP_400_BAD_REQUEST)
+        #     user_obj = User.objects.filter(Q(username=data["email"]) | Q(email=data["email"]))
+        #     if user_obj:
+        #         return Response({"Error": "Email already exits"}, status=status.HTTP_400_BAD_REQUEST)
             
-            serializer = HrSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                hr_obj = Hr.objects.filter(Q(user__username=data["email"]) | Q(user__email=data["email"])).first()
-                hr_serializer = GetHrSerializer(hr_obj,)
-                return Response(hr_serializer.data, status=status.HTTP_201_CREATED)
+        #     serializer = HrSerializer(data=data)
+        #     if serializer.is_valid():
+        #         serializer.save()
+        #         hr_obj = Hr.objects.filter(Q(user__username=data["email"]) | Q(user__email=data["email"])).first()
+        #         hr_serializer = GetHrSerializer(hr_obj,)
+        #         return Response(hr_serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
