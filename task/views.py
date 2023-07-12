@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from .models import Board
-from .serializers import BoardSerializer, CardSerializer, TaskSerializer, GetTaskSerializer, ActivitySerializer
+from .serializers import BoardSerializer, CardSerializer, TaskSerializer, GetTaskSerializer, ActivitySerializer, JobSerializer
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from .models import Card
 from.models import Task
 from.models import Activity
+from.models import Job
 
 #Board views
 class BoardApiView(APIView):
@@ -318,6 +319,94 @@ class ActivityDetailApiView(APIView):
         return Response(status=status.HTTP_202_ACCEPTED)
 
 
+#Job views
+class JobApiView(APIView):
+    serializer_class = JobSerializer
+
+    def get(self, request, *args, **kwargs):
+        '''
+        Get Job List
+        '''
+        queryset = Job.objects.all()
+        if request.query_params:
+            jobs = Job.objects.filter(**request.query_params.dict())
+        else:
+            jobs = Job.objects.all()
+
+        if jobs:
+            serializer = JobSerializer(jobs, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, *args, **kwargs):
+        '''
+         Post  Job data
+         '''
+        data = {}
+        # data["file"] = request.dt
+        # data["task"] = request.data.task
+        # data["comment"] = request.data.comment
+
+        jobs = JobSerializer(data=request.data)
+        if jobs.is_valid():
+            jobs.save()
+            return Response(jobs.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class JobDetailApiView(APIView):
+    serializer_class = JobSerializer
+
+    def get(self, request, pk=None):
+        '''
+        get single Job
+        '''
+        if pk:
+            try:
+                job = Job.objects.get(pk=pk)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            if job:
+                serializer = JobSerializer(job)
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk=None):
+        '''
+        update Job
+        '''
+        job = Job.objects.get(pk=pk)
+        data = JobSerializer(instance=job, data=request.data)
+        if data.is_valid():
+            data.save()
+            return Response(data.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk=None):
+        '''
+        delete job
+        '''
+        job = get_object_or_404(Job, pk=pk)
+        job.delete()
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+
+    
+
+
+
+
+
+
+
+ 
 
     
 
