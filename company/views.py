@@ -9,7 +9,7 @@ from .models import Company
 from .serializers import CompanySerializer
 
 class CompanyListApiView(APIView):
-    permission_classes = [TokenAuthentication]
+    serializer_class = CompanySerializer
 
     # 1. List all
     def get(self, request, *args, **kwargs):
@@ -25,10 +25,14 @@ class CompanyListApiView(APIView):
         '''
         Create the Company with given company data
         '''
+        # data = {
+        #     'task': request.data.get('task'), 
+        #     'completed': request.data.get('completed'), 
+        #     'user': request.user.id
+        # }
         data = {
-            'task': request.data.get('task'), 
-            'completed': request.data.get('completed'), 
-            'user': request.user.id
+            'name' : request.data.get('name'),
+            'user' : request.user.id
         }
         serializer = CompanySerializer(data=data)
         if serializer.is_valid():

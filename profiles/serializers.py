@@ -32,8 +32,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     password = serializers.CharField()
     confirm_password = serializers.CharField()
-    role = serializers.CharField()
-    company = serializers.IntegerField()
 
     def create(self, validated_data):
 
@@ -48,14 +46,13 @@ class ProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Profile
-        fields = ["email", "password", "confirm_password", "role", "company"]
+        fields = ["email", "password", "confirm_password"]
 
 
 class HrSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     password = serializers.CharField()
     confirm_password = serializers.CharField()
-    role = serializers.CharField()
     company = serializers.IntegerField()
 
     def create(self, validated_data):
@@ -72,14 +69,13 @@ class HrSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Hr
-        fields = ["email", "password", "confirm_password", "role", "company"]
+        fields = ["email", "password", "confirm_password", "company"]
 
 
 class CandidateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     password = serializers.CharField()
     confirm_password = serializers.CharField()
-    role = serializers.CharField()
     company = serializers.IntegerField()
 
     def create(self, validated_data):
@@ -99,7 +95,7 @@ class CandidateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Candidate
-        fields = ["email", "password", "confirm_password", "role", "company"]
+        fields = ["email", "password", "confirm_password", "company"]
 
 
 class GetCandidateSerializer(serializers.ModelSerializer):
