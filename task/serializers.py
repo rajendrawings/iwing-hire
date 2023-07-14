@@ -3,8 +3,15 @@ from rest_framework import serializers
 from .models import Board, Card, Task, Activity, Job
 
 
-#serializer for Activity
+#serializer for activity
 class ActivitySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Activity
+        fields = ('id', 'task', 'file', 'comment')
+
+
+class GetActivitySerializer(serializers.ModelSerializer):
     file = serializers.FileField(required=False)
     
     class Meta:
@@ -17,7 +24,7 @@ class TaskSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Task
-        fields = ('id', 'card', 'activitys', 'task_name', 'description')
+        fields = ('id', 'card', 'task_name', 'description')
 
 
 #serializer for get task with activity list
@@ -29,8 +36,16 @@ class GetTaskSerializer(serializers.ModelSerializer):
         fields = ('id', 'card', 'activitys', 'task_name', 'description')
 
 
-#serializers for cards 
+#serializers only for card data
 class CardSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model= Card
+        fields= ('id', 'board', 'tasks', 'card_name', 'sequence')
+
+
+#serializer for get card with task list
+class GetCardSerializer(serializers.ModelSerializer):
     tasks = TaskSerializer(many=True)
     
     class Meta:
@@ -38,8 +53,16 @@ class CardSerializer(serializers.ModelSerializer):
         fields= ('id', 'board', 'tasks', 'card_name', 'sequence')
 
 
-#serializer for board
+#serializer only for board data
 class BoardSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Board
+        fields = ('id', 'name', 'cards', 'created_at', 'modified_at')
+
+
+#serializer for get board with card list
+class GetBoardSerializer(serializers.ModelSerializer):
     cards = CardSerializer(many=True)
 
     class Meta:

@@ -6,6 +6,10 @@ profiles/migrations/
 task/__pycache__/
 task/migrations/
 
+iwinghire/settings/__pycache__/
+iwinghire/settings/consts/__pycache__/
+
+
 media
 *media
 

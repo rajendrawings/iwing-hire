@@ -10,6 +10,7 @@ from .serializers import CompanySerializer
 
 class CompanyListApiView(APIView):
     serializer_class = CompanySerializer
+    permission_classes = (IsAuthenticated,)
 
     # 1. List all
     def get(self, request, *args, **kwargs):
