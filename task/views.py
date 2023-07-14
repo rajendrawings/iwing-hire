@@ -18,6 +18,7 @@ from.models import Job
 #Board views
 class BoardApiView(APIView):
     serializer_class = BoardSerializer
+    permission_classes = (IsAuthenticated,)
     #permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
@@ -50,6 +51,7 @@ class BoardApiView(APIView):
     
 class BoardDetailApiView(APIView):
     serializer_class = BoardSerializer
+    permission_classes = (IsAuthenticated,)
     
     def get(self, request, pk=None):
         '''
@@ -93,6 +95,7 @@ class BoardDetailApiView(APIView):
 #card views
 class CardApiView(APIView):
     serializer_class = CardSerializer
+    permission_classes = (IsAuthenticated,)
     
     def get(self, request, *args, **kwargs):
         '''
@@ -124,6 +127,7 @@ class CardApiView(APIView):
 
 class CardDetailApiView(APIView):
     serializer_class = CardSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=None):
         '''
@@ -167,6 +171,7 @@ class CardDetailApiView(APIView):
 #Task views
 class TaskApiView(APIView):
     serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticated,)
     
     def get(self, request, *args, **kwargs):
         '''
@@ -198,6 +203,7 @@ class TaskApiView(APIView):
     
 class TaskDetailApiView(APIView):
     serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticated,)
     
     def get(self, request, pk=None):
         '''
@@ -242,6 +248,7 @@ class TaskDetailApiView(APIView):
 #Activity views
 class ActivityApiView(APIView):
     serializer_class = ActivitySerializer
+    permission_classes = (IsAuthenticated,)
     
     def get(self, request, *args, **kwargs):
         '''
@@ -278,6 +285,7 @@ class ActivityApiView(APIView):
     
 class ActivityDetailApiView(APIView):
     serializer_class = ActivitySerializer
+    permission_classes = (IsAuthenticated,)
     
     def get(self, request, pk=None):
         '''
@@ -322,6 +330,7 @@ class ActivityDetailApiView(APIView):
 #Job views
 class JobApiView(APIView):
     serializer_class = JobSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         '''
@@ -358,6 +367,7 @@ class JobApiView(APIView):
 
 class JobDetailApiView(APIView):
     serializer_class = JobSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk=None):
         '''

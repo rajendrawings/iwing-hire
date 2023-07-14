@@ -41,7 +41,7 @@ class CardSerializer(serializers.ModelSerializer):
     
     class Meta:
         model= Card
-        fields= ('id', 'board', 'card_name', 'sequence')
+        fields= ('id', 'board', 'tasks', 'card_name', 'sequence')
 
 
 #serializer for get card with task list

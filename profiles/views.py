@@ -78,6 +78,7 @@ class ProfileApiView(APIView):
 
 class CandidateApiView(APIView):
     serializer_class = CandidateSerializer
+    permission_classes = (IsAuthenticated,)
 
     # 2. Create
     def post(self, request, *args, **kwargs):
