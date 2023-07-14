@@ -19,19 +19,15 @@ urlpatterns = [
     path('activity', ActivityApiView.as_view()),
     path('activity/<int:pk>', ActivityDetailApiView.as_view()),
 
+#Below urls for Jobs
+    path('job', JobApiView.as_view()),
+    path('job/<int:pk>', JobDetailApiView.as_view()),
+
+    
 
 
-    #Below urls for Board.................
-    # path('board',ApiOverView, name='home'),
-    # path('add', add_boards, name='add_board'),
-    # path('list', view_board, name='list'),
-    # path('board/<int:pk>', get_boards, name='get_boards'),
-    # path('update/<int:pk>', update_board, name='update_board'),
-    # path('boards/<int:pk>', delete_board, name='delete-board'),
 
-    # #Below urls is for Card...............
-    # path('card',ApiOverViewCard, name='cardhome'),
-    # path('create_cards',add_cards, name='create_cards'),
-    # path('list_cards', view_cards, name='list_cards'),
 
+
+   
 ]

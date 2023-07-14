@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Board, Card, Task, Activity
+from .models import Board, Card, Task, Activity, Job
 
 
 #serializer for activity
@@ -68,6 +68,14 @@ class GetBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = ('id', 'name', 'cards', 'created_at', 'modified_at')
+
+
+#serializer for Job
+class JobSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Job
+        fields = ('id', 'job_title', 'description', 'created_at', 'modified_at')
 
 
 
