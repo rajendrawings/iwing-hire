@@ -53,6 +53,17 @@ class Job(models.Model):
         return self.job_title
 
 
+class Interviewer(models.Model):
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    email = models.CharField(max_length=100, blank = False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    company_id = models.IntegerField(primary_key=True)
+
+
+
+
 
 
 

@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from .models import Board
-from .serializers import BoardSerializer, CardSerializer, TaskSerializer, GetTaskSerializer, ActivitySerializer, JobSerializer
+from .serializers import BoardSerializer, CardSerializer, TaskSerializer, GetTaskSerializer, ActivitySerializer, JobSerializer, InterviewerSerializer
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
@@ -14,6 +14,7 @@ from .models import Card
 from.models import Task
 from.models import Activity
 from.models import Job
+from.models import Interviewer
 
 #Board views
 class BoardApiView(APIView):
@@ -406,6 +407,85 @@ class JobDetailApiView(APIView):
         job = get_object_or_404(Job, pk=pk)
         job.delete()
         return Response(status=status.HTTP_202_ACCEPTED)
+
+
+class InterviewerApiView(APIView):
+    serializer_class = InterviewerSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        '''
+        Get Interviewer List
+        '''
+        queryset = Interviewer.objects.all()
+        if request.query_params:
+            interviewers = Interviwer.objects.filter(**request.query_params.dict())
+        else:
+            interviewers = Interviewer.objects.all()
+
+        if interviewers:
+            serializer = InterviewerSerializer(interviewers, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        post interviewer data
+        '''
+        data = {}
+        interviewers = InterviewerSerializer(data=request.data)
+        if interviewers.is_valid():
+            interviewers.save()
+            return Response(interviewers.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class InterviewerDetailApiView(APIView):
+    serializer_class = InterviewerSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk=None):
+        '''
+        get single interviewer
+        '''
+        if pk:
+            try:
+                interviewer = Interviewer.objects.get(pk=pk)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            if interviewer:
+                serializer = InterviewerSerializer(interviewer)
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk=None):
+        '''
+        update interviewer
+        '''
+        interviewer = Interviewer.objects.get(pk=pk)
+        data = InterviewerSerializer(instance=interviewer, data=request.data)
+        if data.is_valid():
+            data.save()
+            return Response(data.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request,pk=None):
+        '''
+        delete interviewer
+        '''
+        interviewer = get_object_or_404(Interviewer,pk=pk)
+        interviewer.delete()
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+
+
 
 
     
