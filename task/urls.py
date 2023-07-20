@@ -23,6 +23,12 @@ urlpatterns = [
     path('job', JobApiView.as_view()),
     path('job/<int:pk>', JobDetailApiView.as_view()),
 
+#Below urls for Interviewer
+    path('interviewer', InterviewerApiView.as_view()),
+    path('interviewer/<int:pk>', InterviewerDetailApiView.as_view()),
+
+
+
     
 
 
