@@ -57,22 +57,6 @@ class ProfileApiView(APIView):
             profile_obj = Profile.objects.filter(Q(user__username=data["email"]) | Q(user__email=data["email"])).first()
             profile_serializer = GetProfileSerializer(profile_obj,)
             return Response(profile_serializer.data, status=status.HTTP_201_CREATED)
-            
-        #     company_obj = Company.objects.filter(id=data['company'])
-        #     if not company_obj:
-        #         return Response({"Error": "Company does not exists"}, status=status.HTTP_400_BAD_REQUEST)
-            
-        #     user_obj = User.objects.filter(Q(username=data["email"]) | Q(email=data["email"]))
-        #     if user_obj:
-        #         return Response({"Error": "Email already exits"}, status=status.HTTP_400_BAD_REQUEST)
-            
-        #     serializer = HrSerializer(data=data)
-        #     if serializer.is_valid():
-        #         serializer.save()
-        #         hr_obj = Hr.objects.filter(Q(user__username=data["email"]) | Q(user__email=data["email"])).first()
-        #         hr_serializer = GetHrSerializer(hr_obj,)
-        #         return Response(hr_serializer.data, status=status.HTTP_201_CREATED)
-        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
