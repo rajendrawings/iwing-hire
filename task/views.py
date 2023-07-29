@@ -20,23 +20,13 @@ from.models import Interviewer
 class BoardApiView(APIView):
     serializer_class = BoardSerializer
     permission_classes = (IsAuthenticated,)
-    #permission_classes = (IsAuthenticated,)
-
     def get(self, request, *args, **kwargs):
         '''
         Get Board List
         '''
-        queryset = Board.objects.all()
-        if request.query_params:
-            boards = Board.objects.filter(**request.query_params.dict())
-        else:
-            boards = Board.objects.all()
-
-        if boards:
-            serializer = BoardSerializer(boards, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        boards = Board.objects.all()
+        serializer = BoardSerializer(boards, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -102,17 +92,9 @@ class CardApiView(APIView):
         '''
         Get card List
         '''
-        queryset = Card.objects.all()
-        if request.query_params:
-            cards = Card.objects.filter(**request.query_params.dict())
-        else:
-            cards = Card.objects.all()
-
-        if cards:
-            serializer = CardSerializer(cards, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        cards = Card.objects.all()
+        serializer = CardSerializer(cards, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -178,17 +160,9 @@ class TaskApiView(APIView):
         '''
         Get Task List
         '''
-        queryset = Task.objects.all()
-        if request.query_params:
-            tasks = Task.objects.filter(**request.query_params.dict())
-        else:
-            tasks = Task.objects.all()
-
-        if tasks:
-            serializer = TaskSerializer(tasks, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -272,9 +246,6 @@ class ActivityApiView(APIView):
          Post  Activity data
          '''
         data = {}
-        # data["file"] = request.dt
-        # data["task"] = request.data.task
-        # data["comment"] = request.data.comment
 
         activitys = ActivitySerializer(data=request.data)
         if activitys.is_valid():
@@ -337,26 +308,15 @@ class JobApiView(APIView):
         '''
         Get Job List
         '''
-        queryset = Job.objects.all()
-        if request.query_params:
-            jobs = Job.objects.filter(**request.query_params.dict())
-        else:
-            jobs = Job.objects.all()
-
-        if jobs:
-            serializer = JobSerializer(jobs, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        jobs = Job.objects.all()
+        serializer = JobSerializer(jobs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
          Post  Job data
          '''
         data = {}
-        # data["file"] = request.dt
-        # data["task"] = request.data.task
-        # data["comment"] = request.data.comment
 
         jobs = JobSerializer(data=request.data)
         if jobs.is_valid():
@@ -417,17 +377,9 @@ class InterviewerApiView(APIView):
         '''
         Get Interviewer List
         '''
-        queryset = Interviewer.objects.all()
-        if request.query_params:
-            interviewers = Interviwer.objects.filter(**request.query_params.dict())
-        else:
-            interviewers = Interviewer.objects.all()
-
-        if interviewers:
-            serializer = InterviewerSerializer(interviewers, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        interviewers = Interviewer.objects.all()
+        serializer = InterviewerSerializer(interviewers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
