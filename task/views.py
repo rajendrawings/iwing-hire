@@ -4,8 +4,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
+import odf
 from .models import Board
-from .serializers import BoardSerializer, CardSerializer, TaskSerializer, GetTaskSerializer, ActivitySerializer, JobSerializer, InterviewerSerializer
+from .serializers import (
+    BoardSerializer, 
+    CardSerializer, 
+    TaskSerializer, 
+    GetTaskSerializer, 
+    ActivitySerializer, 
+    JobSerializer, 
+    InterviewerSerializer, 
+    InterviewerSerializer1
+)
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
@@ -15,6 +25,7 @@ from.models import Task
 from.models import Activity
 from.models import Job
 from.models import Interviewer
+import pandas as pd
 
 #Board views
 class BoardApiView(APIView):
@@ -393,6 +404,43 @@ class InterviewerApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    
+class InterviewerImportAPI(APIView):
+    serializer_class = InterviewerSerializer1
+
+    def post(self, request, *args, **kwargs):
+        company_id = request.data.get('company', None)
+        file = request.FILES.get('file')
+
+        if not file:
+            return Response({"error": "please provide Excel file."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not company_id:
+            return Response({"error":"please provide valid company_id."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            if not file.name.endswith('.xlsx'):
+                return Response({"error" : "Invalid file format,only excel file are supported."}, status= status.HTTP_400_BAD_REQUEST)
+            else:
+                df = pd.read_excel(file)
+                for index, row in df.iterrows():
+                    import pdb;pdb.set_trace()
+                    try:
+                        data = row.to_dict()
+                        data["company_id"] = int(company_id)
+                        serializer = InterviewerSerializer(data=data)
+                        if serializer.is_valid():
+                            serializer.save()
+                        else:
+                            print("serializer.errors : ", serializer.errors)
+                        # interviewer_obj = Interviewer.objects.create(**row.to_dict())
+                    except:
+                        print("error : ", row.to_dict)
+                return Response({"msg": "Successfully import interviewer"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error":str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+
 
 class InterviewerDetailApiView(APIView):
     serializer_class = InterviewerSerializer
@@ -435,6 +483,10 @@ class InterviewerDetailApiView(APIView):
         interviewer = get_object_or_404(Interviewer,pk=pk)
         interviewer.delete()
         return Response(status=status.HTTP_202_ACCEPTED)
+
+
+
+
 
 
 

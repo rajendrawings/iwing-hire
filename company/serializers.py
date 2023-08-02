@@ -8,6 +8,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
 
 class CompanySerializer(serializers.ModelSerializer):
+    
 
     def create(self, validated_data):
         validated_data["user"] = self.context.get('user', None)
@@ -18,7 +19,7 @@ class CompanySerializer(serializers.ModelSerializer):
         if company and subscription_id:
             subscription_data = {
                 "subscription_id": subscription_id,
-                "company": company,
+                "company": company.id,
                 "status": True
             }
             CompanySubscription.objects.create(**subscription_data)

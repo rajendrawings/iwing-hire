@@ -26,6 +26,7 @@ urlpatterns = [
 #Below urls for Interviewer
     path('interviewer', InterviewerApiView.as_view()),
     path('interviewer/<int:pk>', InterviewerDetailApiView.as_view()),
+    path('import_interviewer',InterviewerImportAPI.as_view())
 
 
 

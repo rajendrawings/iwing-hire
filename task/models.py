@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils import timezone
+from company.models import Company
+
 
 
 class Board(models.Model):
@@ -54,12 +57,19 @@ class Job(models.Model):
 
 
 class Interviewer(models.Model):
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    email = models.CharField(max_length=100, blank = False)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    first_name = models.CharField(max_length=200, blank=True, null=True)
+    last_name = models.CharField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=100, blank = False)
+    designation = models.CharField(max_length=100, blank=True, null=True)
+    skill_sets = models.CharField(max_length=100, blank=True, null=True)
+    year_of_experience = models.IntegerField(blank=True, null=True)
+    employee_id = models.IntegerField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to="media/images/activity", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    company_id = models.IntegerField(primary_key=True)
+    
 
 
 
