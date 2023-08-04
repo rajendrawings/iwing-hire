@@ -4,8 +4,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
+import odf
 from .models import Board
-from .serializers import BoardSerializer, CardSerializer, TaskSerializer, GetTaskSerializer, ActivitySerializer, JobSerializer, InterviewerSerializer
+from .serializers import (
+    BoardSerializer, 
+    CardSerializer, 
+    TaskSerializer, 
+    GetTaskSerializer, 
+    ActivitySerializer, 
+    JobSerializer, 
+    InterviewerSerializer, 
+    InterviewerSerializer1
+)
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
@@ -15,28 +25,19 @@ from.models import Task
 from.models import Activity
 from.models import Job
 from.models import Interviewer
+import pandas as pd
 
 #Board views
 class BoardApiView(APIView):
     serializer_class = BoardSerializer
     permission_classes = (IsAuthenticated,)
-    #permission_classes = (IsAuthenticated,)
-
     def get(self, request, *args, **kwargs):
         '''
         Get Board List
         '''
-        queryset = Board.objects.all()
-        if request.query_params:
-            boards = Board.objects.filter(**request.query_params.dict())
-        else:
-            boards = Board.objects.all()
-
-        if boards:
-            serializer = BoardSerializer(boards, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        boards = Board.objects.all()
+        serializer = BoardSerializer(boards, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -102,17 +103,9 @@ class CardApiView(APIView):
         '''
         Get card List
         '''
-        queryset = Card.objects.all()
-        if request.query_params:
-            cards = Card.objects.filter(**request.query_params.dict())
-        else:
-            cards = Card.objects.all()
-
-        if cards:
-            serializer = CardSerializer(cards, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        cards = Card.objects.all()
+        serializer = CardSerializer(cards, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -178,17 +171,9 @@ class TaskApiView(APIView):
         '''
         Get Task List
         '''
-        queryset = Task.objects.all()
-        if request.query_params:
-            tasks = Task.objects.filter(**request.query_params.dict())
-        else:
-            tasks = Task.objects.all()
-
-        if tasks:
-            serializer = TaskSerializer(tasks, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -255,26 +240,15 @@ class ActivityApiView(APIView):
         '''
         Get Activity List
         '''
-        queryset = Activity.objects.all()
-        if request.query_params:
-            activitys = Activity.objects.filter(**request.query_params.dict())
-        else:
-            activitys = Activity.objects.all()
-
-        if activitys:
-            serializer = ActivitySerializer(activitys, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        activitys = Activity.objects.all()
+        serializer = ActivitySerializer(activitys, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
          Post  Activity data
          '''
         data = {}
-        # data["file"] = request.dt
-        # data["task"] = request.data.task
-        # data["comment"] = request.data.comment
 
         activitys = ActivitySerializer(data=request.data)
         if activitys.is_valid():
@@ -337,26 +311,15 @@ class JobApiView(APIView):
         '''
         Get Job List
         '''
-        queryset = Job.objects.all()
-        if request.query_params:
-            jobs = Job.objects.filter(**request.query_params.dict())
-        else:
-            jobs = Job.objects.all()
-
-        if jobs:
-            serializer = JobSerializer(jobs, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        jobs = Job.objects.all()
+        serializer = JobSerializer(jobs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
          Post  Job data
          '''
         data = {}
-        # data["file"] = request.dt
-        # data["task"] = request.data.task
-        # data["comment"] = request.data.comment
 
         jobs = JobSerializer(data=request.data)
         if jobs.is_valid():
@@ -417,17 +380,9 @@ class InterviewerApiView(APIView):
         '''
         Get Interviewer List
         '''
-        queryset = Interviewer.objects.all()
-        if request.query_params:
-            interviewers = Interviwer.objects.filter(**request.query_params.dict())
-        else:
-            interviewers = Interviewer.objects.all()
-
-        if interviewers:
-            serializer = InterviewerSerializer(interviewers, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        interviewers = Interviewer.objects.all()
+        serializer = InterviewerSerializer(interviewers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -440,6 +395,42 @@ class InterviewerApiView(APIView):
             return Response(interviewers.data)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    
+class InterviewerImportAPI(APIView):
+    serializer_class = InterviewerSerializer1
+
+    def post(self, request, *args, **kwargs):
+        company_id = request.data.get('company', None)
+        file = request.FILES.get('file')
+
+        if not file:
+            return Response({"error": "please provide Excel file."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not company_id:
+            return Response({"error":"please provide valid company_id."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            if not file.name.endswith('.xlsx'):
+                return Response({"error" : "Invalid file format,only excel file are supported."}, status= status.HTTP_400_BAD_REQUEST)
+            else:
+                df = pd.read_excel(file)
+                for index, row in df.iterrows():
+                    try:
+                        data = row.to_dict()
+                        data["company_id"] = int(company_id)
+                        serializer = InterviewerSerializer(data=data)
+                        if serializer.is_valid():
+                            serializer.save()
+                        else:
+                            print("serializer.errors : ", serializer.errors)
+                        # interviewer_obj = Interviewer.objects.create(**row.to_dict())
+                    except:
+                        print("error : ", row.to_dict)
+                return Response({"msg": "Successfully import interviewer"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error":str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
 
 
 class InterviewerDetailApiView(APIView):
@@ -483,6 +474,10 @@ class InterviewerDetailApiView(APIView):
         interviewer = get_object_or_404(Interviewer,pk=pk)
         interviewer.delete()
         return Response(status=status.HTTP_202_ACCEPTED)
+
+
+
+
 
 
 

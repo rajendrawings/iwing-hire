@@ -4,9 +4,8 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
-
-from .models import Company
-from .serializers import CompanySerializer
+from .models import Company, Subscription, CompanySubscription
+from .serializers import CompanySerializer, SubscriptionSerializer, CompanySubscriptionSerializer
 
 class CompanyListApiView(APIView):
     serializer_class = CompanySerializer
@@ -22,22 +21,105 @@ class CompanyListApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 2. Create
-    def post(self, request, *args, **kwargs):
+    def post(self,request, *args, **kwargs):
         '''
         Create the Company with given company data
         '''
-        # data = {
-        #     'task': request.data.get('task'), 
-        #     'completed': request.data.get('completed'), 
-        #     'user': request.user.id
-        # }
-        data = {
-            'name' : request.data.get('name'),
-            'user' : request.user.id
-        }
-        serializer = CompanySerializer(data=data)
+        subscription_id = request.data.get("subscription_id", None)
+        serializer = CompanySerializer(data=request.data, context = {"user": request.user, "subscription_id": subscription_id})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SubscriptionListApiView(APIView):
+    serializer_class = SubscriptionSerializer
+
+    def get(self, request, *args, **kwargs):
+        '''
+        Get Subscriptions List
+        '''
+        queryset = Subscription.objects.all()
+        serializer = SubscriptionSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        post subscription data
+        '''
+        data = {}
+        subscriptions = SubscriptionSerializer(data=request.data)
+        if subscriptions.is_valid():
+            subscriptions.save()
+            return Response(subscriptions.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class SubscriptionDetailApiView(APIView):
+    serializer_class = SubscriptionSerializer
+
+    def get(self, request, pk=None):
+        '''
+        get single subscription
+        '''
+        if pk:
+            try:
+                subscription = Subscription.objects.get(pk=pk)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            if subscription:
+                serializer = SubscriptionSerializer(subscription)
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk=None):
+        '''
+        update subscription
+        '''
+        subscription = Subscription.objects.get(pk=pk)
+        data = SubscriptionSerializer(instance=subscription, data=request.data)
+        if data.is_valid():
+            data.save()
+            return Response(data.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request,pk=None):
+        '''
+        delete subscription
+        '''
+        subscription = get_object_or_404(Subscription,pk=pk)
+        Subscription.delete()
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+
+class CompanySubscriptionListAPIView(APIView):
+    serializer_class = CompanySubscriptionSerializer
+
+    def get (self, request, *args, **kwargs):
+        '''
+        List all the company subscription 
+        '''
+        companysubscriptions = CompanySubscription.objects.all()
+        serializer = CompanySubscriptionSerializer(companysubscriptions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        post companysubscription data
+        '''
+        data = {}
+        companysubscriptions = CompanySubscriptionSerializer(data=request.data)
+        if companysubscriptions.is_valid():
+            companysubscriptions.save()
+            return Response(companysubscriptions.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)

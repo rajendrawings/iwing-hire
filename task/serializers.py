@@ -1,6 +1,10 @@
 from django.db.models import fields
 from rest_framework import serializers
 from .models import Board, Card, Task, Activity, Job, Interviewer
+from company.serializers import CompanySerializer
+import odf
+import pandas as pd
+
 
 
 #serializer for activity
@@ -80,10 +84,20 @@ class JobSerializer(serializers.ModelSerializer):
 
 #serializer for Interviewer
 class InterviewerSerializer(serializers.ModelSerializer):
+    # company = CompanySerializer(many=True)
 
     class Meta:
         model = Interviewer
-        fields = ('email', 'company_id', 'created_at', 'modified_at')
+        fields = ('id', 'name', 'first_name', 'last_name', 'email', 'designation', 'skill_sets', 'year_of_experience', 'employee_id', 'created_at', 'modified_at')
+
+
+class InterviewerSerializer1(serializers.ModelSerializer):
+    file = serializers.FileField()
+
+    class Meta:
+        model = Interviewer
+        fields = ('file', 'company')
+
 
 
 
