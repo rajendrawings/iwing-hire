@@ -73,7 +73,7 @@ class CandidateApiView(APIView):
             'email': request.data.get('email'), 
             'password': request.data.get('password'), 
             'confirm_password': request.data.get('confirm_password'),
-            'role': request.data.get('role').lower(),
+            'role': request.data.get('role'),
             'company': request.data.get('company'),
         }
         if data['password'] != data['confirm_password']:
