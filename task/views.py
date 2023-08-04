@@ -240,17 +240,9 @@ class ActivityApiView(APIView):
         '''
         Get Activity List
         '''
-        queryset = Activity.objects.all()
-        if request.query_params:
-            activitys = Activity.objects.filter(**request.query_params.dict())
-        else:
-            activitys = Activity.objects.all()
-
-        if activitys:
-            serializer = ActivitySerializer(activitys, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        activitys = Activity.objects.all()
+        serializer = ActivitySerializer(activitys, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -424,7 +416,6 @@ class InterviewerImportAPI(APIView):
             else:
                 df = pd.read_excel(file)
                 for index, row in df.iterrows():
-                    import pdb;pdb.set_trace()
                     try:
                         data = row.to_dict()
                         data["company_id"] = int(company_id)

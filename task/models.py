@@ -69,6 +69,9 @@ class Interviewer(models.Model):
     profile_picture = models.ImageField(upload_to="media/images/activity", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
     
 
 
