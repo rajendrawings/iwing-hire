@@ -26,6 +26,7 @@ from.models import Activity
 from.models import Job
 from.models import Interviewer
 import pandas as pd
+import uuid
 
 #Board views
 class BoardApiView(APIView):
@@ -37,7 +38,12 @@ class BoardApiView(APIView):
         '''
         boards = Board.objects.all()
         serializer = BoardSerializer(boards, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "status" : "success",
+            "message" : "List of board retrieved successfully",
+            "data" : serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -46,7 +52,12 @@ class BoardApiView(APIView):
         boards = BoardSerializer(data=request.data)
         if boards.is_valid():
             boards.save()
-            return Response(boards.data)
+            response_data = {
+                "status" : "success",
+                "message" : "Board saved successfully",
+                "data" : boards.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -67,7 +78,12 @@ class BoardDetailApiView(APIView):
 
             if board:
                 serializer = BoardSerializer(board)
-                return Response(serializer.data)
+                response_data = {
+                    "status" : "success",
+                    "message" : "Board retrieved successfully",
+                    "data" : serializer.data
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
@@ -81,7 +97,12 @@ class BoardDetailApiView(APIView):
         data = BoardSerializer(instance=board, data=request.data)
         if data.is_valid():
             data.save()
-            return Response(data.data)
+            response_data = {
+                "status" : "success",
+                "message" : "Board update successfully",
+                "data" : data.data
+            }
+            return Response(response_data,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -91,7 +112,11 @@ class BoardDetailApiView(APIView):
         '''
         board = get_object_or_404(Board, pk=pk)
         board.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        response_data = {
+            "status" : "success",
+            "message" : "board deleted successfully",
+        }
+        return Response(response_data,status=status.HTTP_204_NO_CONTENT)
 
     
 #card views
@@ -105,7 +130,12 @@ class CardApiView(APIView):
         '''
         cards = Card.objects.all()
         serializer = CardSerializer(cards, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "status" : "success",
+            "message" : " List of card retrieved successfully",
+            "data" : serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -114,7 +144,12 @@ class CardApiView(APIView):
         cards = CardSerializer(data=request.data)
         if cards.is_valid():
             cards.save()
-            return Response(cards.data)
+            response_data = {
+                "status" : "success",
+                "message" : "card saved successfully",
+                "data" : cards.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -135,7 +170,12 @@ class CardDetailApiView(APIView):
 
             if card:
                 serializer = CardSerializer(card)
-                return Response(serializer.data)
+                response_data = {
+                    "status" : "success",
+                    "message" : "card retrieved successfully",
+                    "data" : serializer.data
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
@@ -149,7 +189,12 @@ class CardDetailApiView(APIView):
         data = CardSerializer(instance=card, data=request.data)
         if data.is_valid():
             data.save()
-            return Response(data.data)
+            response_data = {
+                "status" : "success",
+                "message" : "card updated successfully",
+                "data" : data.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -159,7 +204,11 @@ class CardDetailApiView(APIView):
         '''
         card = get_object_or_404(Card, pk=pk)
         card.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        response_data = {
+            "status" : "success",
+            "message" : "card deleted successfully",
+        }
+        return Response(response_data,status=status.HTTP_204_NO_CONTENT)
 
 
 #Task views
@@ -173,7 +222,12 @@ class TaskApiView(APIView):
         '''
         tasks = Task.objects.all()
         serializer = TaskSerializer(tasks, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "status" : "success",
+            "message" : "List of task retrieved successfully",
+            "data" : serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -182,7 +236,12 @@ class TaskApiView(APIView):
         tasks = TaskSerializer(data=request.data)
         if tasks.is_valid():
             tasks.save()
-            return Response(tasks.data)
+            response_data = {
+                "status" : "success",
+                "message" : "task saved successfully",
+                "data" : tasks.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -204,7 +263,12 @@ class TaskDetailApiView(APIView):
 
             if task:
                 serializer = GetTaskSerializer(task)
-                return Response(serializer.data)
+                response_data = {
+                    "status" : "success",
+                    "message" : "task retrieved successfully",
+                    "data" : serializer.data
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
@@ -218,7 +282,12 @@ class TaskDetailApiView(APIView):
         data = TaskSerializer(instance=task, data=request.data)
         if data.is_valid():
             data.save()
-            return Response(data.data)
+            response_data = {
+                "status" : "success",
+                "message" : "task updated successfully",
+                "data" : data.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -228,7 +297,11 @@ class TaskDetailApiView(APIView):
         '''
         task = get_object_or_404(Task, pk=pk)
         task.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        response_data = {
+            "status" : "success",
+            "message" : "task deleted successfully",
+        }
+        return Response(response_data,status=status.HTTP_204_NO_CONTENT)
 
 
 #Activity views
@@ -242,7 +315,12 @@ class ActivityApiView(APIView):
         '''
         activitys = Activity.objects.all()
         serializer = ActivitySerializer(activitys, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "status" : "success",
+            "message": "List of activity retrieved  successfully",
+            "data" : serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -253,7 +331,12 @@ class ActivityApiView(APIView):
         activitys = ActivitySerializer(data=request.data)
         if activitys.is_valid():
             activitys.save()
-            return Response(activitys.data)
+            response_data = {
+                "status" : "success",
+                "message" : "activity saved successfully",
+                "data" : activitys.data
+            }
+            return Response(response_data,status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -275,7 +358,12 @@ class ActivityDetailApiView(APIView):
 
             if activity:
                 serializer = ActivitySerializer(activity)
-                return Response(serializer.data)
+                response_data = {
+                    "status" : "success",
+                    "message" : "activity retrieved successfully",
+                    "data" : serializer.data
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
@@ -289,7 +377,12 @@ class ActivityDetailApiView(APIView):
         data = ActivitySerializer(instance=activity, data=request.data)
         if data.is_valid():
             data.save()
-            return Response(data.data)
+            response_data = {
+                "status" : "success",
+                "message" : "activity updated successfully",
+                "data" : data.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -299,7 +392,11 @@ class ActivityDetailApiView(APIView):
         '''
         activity = get_object_or_404(Activity, pk=pk)
         activity.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        response_data = {
+            "status" : "success",
+            "message" : "activity deleted successfully",
+        }
+        return Response(response_data,status=status.HTTP_202_ACCEPTED)
 
 
 #Job views
@@ -313,18 +410,40 @@ class JobApiView(APIView):
         '''
         jobs = Job.objects.all()
         serializer = JobSerializer(jobs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "status" : "success",
+            "message" : "List of job retrieved successfully",
+            "data" : serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
-         Post  Job data
-         '''
-        data = {}
-
+        Post  Job data
+        '''
+        random_uuid = uuid.uuid1()
+        print("1111")
+        job_id = str(random_uuid)
+        print("222222")
+        while Job .objects.filter(job_id=random_uuid).exists():
+            print("33333333")
+            random_uuid = uuid.uuid1()
+            print("44444444444444")
+        data = {
+            "job_id" : request.data.get("job_id"),
+            "job_title" : request.data.get("job_title"),
+            "description" : request.data.get("decription"),
+        }
+        print("555555555555")
         jobs = JobSerializer(data=request.data)
         if jobs.is_valid():
             jobs.save()
-            return Response(jobs.data)
+            response_data = {
+                "status" : "success",
+                "message" : "job saved successfully",
+                "data" : jobs.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -345,7 +464,12 @@ class JobDetailApiView(APIView):
 
             if job:
                 serializer = JobSerializer(job)
-                return Response(serializer.data)
+                response_data = {
+                    "status" : "success",
+                    "message" : "job retrieved successfully",
+                    "data": serializer.data
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
@@ -359,7 +483,12 @@ class JobDetailApiView(APIView):
         data = JobSerializer(instance=job, data=request.data)
         if data.is_valid():
             data.save()
-            return Response(data.data)
+            response_data = {
+                "status" : "success",
+                "message" : "job updated successfully",
+                "data" : data.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -369,7 +498,11 @@ class JobDetailApiView(APIView):
         '''
         job = get_object_or_404(Job, pk=pk)
         job.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        response_data = {
+            "status" : "success",
+            "message" : "job deleted successfully",
+        }
+        return Response(response_data,status=status.HTTP_204_NO_CONTENT)
 
 
 class InterviewerApiView(APIView):
@@ -382,7 +515,12 @@ class InterviewerApiView(APIView):
         '''
         interviewers = Interviewer.objects.all()
         serializer = InterviewerSerializer(interviewers, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "status" : "success",
+            "message" : "List of interviewer retrieved successfully",
+            "data" :serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -392,7 +530,12 @@ class InterviewerApiView(APIView):
         interviewers = InterviewerSerializer(data=request.data)
         if interviewers.is_valid():
             interviewers.save()
-            return Response(interviewers.data)
+            response_data = {
+                "status" : "success",
+                "message" : "interviewer saved successfully",
+                "data" : interviewers.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -422,12 +565,17 @@ class InterviewerImportAPI(APIView):
                         serializer = InterviewerSerializer(data=data)
                         if serializer.is_valid():
                             serializer.save()
+                            response_data = {
+                                "status" : "success",
+                                "message" : "interviewer imported successfully",
+                                "data" : serializer.data
+                            }
                         else:
                             print("serializer.errors : ", serializer.errors)
                         # interviewer_obj = Interviewer.objects.create(**row.to_dict())
                     except:
                         print("error : ", row.to_dict)
-                return Response({"msg": "Successfully import interviewer"}, status=status.HTTP_200_OK)
+                return Response(response_data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error":str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
@@ -449,7 +597,12 @@ class InterviewerDetailApiView(APIView):
 
             if interviewer:
                 serializer = InterviewerSerializer(interviewer)
-                return Response(serializer.data)
+                response_data = {
+                    "status" : "success",
+                    "message" : "interviewer retrieved succesfully",
+                    "data" : serializer.data
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
@@ -463,7 +616,12 @@ class InterviewerDetailApiView(APIView):
         data = InterviewerSerializer(instance=interviewer, data=request.data)
         if data.is_valid():
             data.save()
-            return Response(data.data)
+            response_data = {
+                "status" : "success",
+                "message" : "interviewer updated successfully",
+                "data" : data.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -473,7 +631,11 @@ class InterviewerDetailApiView(APIView):
         '''
         interviewer = get_object_or_404(Interviewer,pk=pk)
         interviewer.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        response_data = {
+            "status" : "success",
+            "message" : "interviewer deleted successfully",
+        }
+        return Response(response_data,status=status.HTTP_204_NO_CONTENT)
 
 
 

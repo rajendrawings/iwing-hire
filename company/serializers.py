@@ -31,8 +31,7 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class CompanySubscriptionSerializer(serializers.ModelSerializer):
-    company = CompanySerializer()
-    subscription = SubscriptionSerializer()
+
     class Meta:
         model = CompanySubscription
         fields = ["status", "company", "subscription"]

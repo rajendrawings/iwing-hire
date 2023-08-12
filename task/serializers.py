@@ -76,10 +76,11 @@ class GetBoardSerializer(serializers.ModelSerializer):
 
 #serializer for Job
 class JobSerializer(serializers.ModelSerializer):
+    company_id=serializers.IntegerField()
 
     class Meta:
         model = Job
-        fields = ('id', 'job_title', 'description', 'created_at', 'modified_at')
+        fields = ('id', 'job_title', 'description', 'created_at', 'modified_at', 'company_id')
 
 
 #serializer for Interviewer

@@ -23,10 +23,20 @@ class ProfileDetailApiView(APIView):
         hr_obj = Hr.objects.filter(user=request.user)
         if user_obj:
             serializer = GetProfileSerializer(user_obj[0], many=False)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            response_data = {
+                "status" : "success",
+                "message" : "user objects retrieved successfully",
+                "data" : serializer.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         elif hr_obj:
             serializer = GetHrSerializer(hr_obj[0], many=False)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            response_data = {
+                "status" : "success",
+                "message" : "Hr objects retrieved successfully",
+                "data" :serializer.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         
         return Response({"Error": "User profile does not exits"})
     
@@ -56,7 +66,12 @@ class ProfileApiView(APIView):
             serializer.save()
             profile_obj = Profile.objects.filter(Q(user__username=data["email"]) | Q(user__email=data["email"])).first()
             profile_serializer = GetProfileSerializer(profile_obj,)
-            return Response(profile_serializer.data, status=status.HTTP_201_CREATED)
+            response_data = {
+                "status" : "success",
+                "message" : "profile saved successfully",
+                "data" : profile_serializer.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -101,6 +116,11 @@ class CandidateApiView(APIView):
             serializer.save()
             candidate_obj = Candidate.objects.filter(Q(user__username=data["email"]) | Q(user__email=data["email"])).first()
             candidate_serializer = GetCandidateSerializer(candidate_obj,)
-            return Response(candidate_serializer.data, status=status.HTTP_201_CREATED)
+            response_data = {
+                "status" : "success",
+                "message" : "candidate saved successfully",
+                "data" : candidate_serializer.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
