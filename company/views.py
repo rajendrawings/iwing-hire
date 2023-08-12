@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -18,7 +19,12 @@ class CompanyListApiView(APIView):
         '''
         companys = Company.objects.all()
         serializer = CompanySerializer(companys, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "status" : "success",
+            "message" : "List of company retrieved successfully",
+            "data" : serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     # 2. Create
     def post(self,request, *args, **kwargs):
@@ -29,13 +35,19 @@ class CompanyListApiView(APIView):
         serializer = CompanySerializer(data=request.data, context = {"user": request.user, "subscription_id": subscription_id})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            response_data = {
+                "status" : "success",
+                "message" : "company saved successfully",
+                "data" : serializer.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
 
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubscriptionListApiView(APIView):
+    
     serializer_class = SubscriptionSerializer
 
     def get(self, request, *args, **kwargs):
@@ -44,7 +56,12 @@ class SubscriptionListApiView(APIView):
         '''
         queryset = Subscription.objects.all()
         serializer = SubscriptionSerializer(queryset, many=True)
-        return Response(serializer.data)
+        response_data = {
+            "status" : "success",
+            "message": "subscription retrieved successfully",
+            "data": serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -54,7 +71,13 @@ class SubscriptionListApiView(APIView):
         subscriptions = SubscriptionSerializer(data=request.data)
         if subscriptions.is_valid():
             subscriptions.save()
-            return Response(subscriptions.data)
+            response_data = {
+                "status": "success",
+                "message" : "subscription saved succesfully",
+                "data" : subscriptions.data
+
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -74,7 +97,12 @@ class SubscriptionDetailApiView(APIView):
 
             if subscription:
                 serializer = SubscriptionSerializer(subscription)
-                return Response(serializer.data)
+                response_data = {
+                    "status" : "success",
+                    "message" : "subscription retrieved successfully",
+                    "data" : serializer.data
+                }
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
@@ -88,7 +116,12 @@ class SubscriptionDetailApiView(APIView):
         data = SubscriptionSerializer(instance=subscription, data=request.data)
         if data.is_valid():
             data.save()
-            return Response(data.data)
+            response_data = {
+                "status": "success",
+                "message" : "subscription updated successfully",
+                "data" : data.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -97,8 +130,12 @@ class SubscriptionDetailApiView(APIView):
         delete subscription
         '''
         subscription = get_object_or_404(Subscription,pk=pk)
-        Subscription.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
+        subscription.delete()
+        response_data = {
+            "status" : "success",
+            "message" : "subscription deleted successfully",
+        }
+        return Response(response_data,status=status.HTTP_204_NO_CONTENT)
 
 
 class CompanySubscriptionListAPIView(APIView):
@@ -110,7 +147,12 @@ class CompanySubscriptionListAPIView(APIView):
         '''
         companysubscriptions = CompanySubscription.objects.all()
         serializer = CompanySubscriptionSerializer(companysubscriptions, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "status" : "success",
+            "message" : "companysubscription retrieved successfully",
+            "data" : serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -120,6 +162,10 @@ class CompanySubscriptionListAPIView(APIView):
         companysubscriptions = CompanySubscriptionSerializer(data=request.data)
         if companysubscriptions.is_valid():
             companysubscriptions.save()
-            return Response(companysubscriptions.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            response_data = {
+                "status": "success",
+                "message": "Subscription activate successfully.",
+                "data": companysubscriptions.data
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
+        return Response(companysubscriptions.errors, status=status.HTTP_400_BAD_REQUEST)

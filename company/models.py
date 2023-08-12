@@ -19,7 +19,7 @@ class Subscription(models.Model):
 class Company(models.Model):
     name = models.CharField(max_length = 180, unique=True)
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True)
-    address = models.CharField(max_length = 500, blank = True, null = True)
+    address = models.TextField(blank = True, null = True)
     designation = models.CharField(max_length = 200, blank = True, null = True)
     email = models.EmailField(max_length=100, blank = True, null = True)
     mobile_number = models.IntegerField(blank = True, null = True)

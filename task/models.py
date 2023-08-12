@@ -47,8 +47,10 @@ class Activity(models.Model):
 
 
 class Job(models.Model):
-    job_title = models.CharField(max_length=200)
-    description = models.TextField()
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=True, null=True)
+    job_id = models.CharField(max_length=50, blank=True, null=True)
+    job_title = models.CharField(max_length=200, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -57,7 +59,7 @@ class Job(models.Model):
 
 
 class Interviewer(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=True, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
