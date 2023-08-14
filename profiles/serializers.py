@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, Hr, Candidate, CompanysCandidates
+from .models import Profile, Hr, Candidate, CompanysCandidates, HRGroup
 from .common import create_user
 from company.serializers import CompanySerializer
 from django.contrib.auth.models import User
@@ -104,3 +104,10 @@ class GetCandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ["user"]
+
+
+class HRGroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = HRGroup
+        fields = ["id", "group_id", "group_name", "created_at", "modified_at"]
