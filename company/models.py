@@ -28,7 +28,7 @@ class Company(models.Model):
     about = models.CharField(max_length = 400, blank = True, null = True)
     terms_policy = models.CharField(max_length = 500, blank = True, null = True)
     Company_logo = models.FileField(upload_to='media/images/activity', null=True)
-    created_at = models.DateTimeField(timezone.now())
+    created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(timezone.now)
     
     def __str__(self):
