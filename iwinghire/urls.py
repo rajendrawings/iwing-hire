@@ -20,28 +20,22 @@ from rest_framework_simplejwt.views import (
 )
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-
 from django.urls import path, include
 from django.contrib import admin
 from company import urls as company_api
 from profiles import urls as profile_api
 from task import urls as task_api
 from django.conf import settings
-from  django.conf.urls.static import static
-
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/schema///', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    path('api/v1/', 
-        include([
-            path('company/', include(company_api)),
-            path('profile/', include(profile_api)),
-            path('task/', include(task_api)),
-        ])
-    )
-]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+                  path('admin/', admin.site.urls),
+                  path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+                  path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+                  path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+                  path('api/schema///', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+                  path('company/', include(company_api)),
+                  path('profile/', include(profile_api)),
+                  path('task/', include(task_api)),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
