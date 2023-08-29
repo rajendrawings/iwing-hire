@@ -23,5 +23,6 @@ winghire/settings/
 
 .venv
 
+
 iwinghire/settings/__pycache__/
 iwinghire/settings/consts/__pycache__/
