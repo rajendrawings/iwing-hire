@@ -36,8 +36,8 @@ SIMPLE_JWT = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Your project description',
+    'TITLE': 'IwingHire APIS',
+    'DESCRIPTION': 'IwingHire project description',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False
 }
