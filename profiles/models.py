@@ -3,9 +3,6 @@ from django.contrib.auth.models import User
 from company.models import Company
 import uuid
 from django.utils import timezone
-# from profiles.models import HRGroup
-
-
 
 
 class Profile(models.Model):

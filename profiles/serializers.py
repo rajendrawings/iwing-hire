@@ -25,7 +25,7 @@ class GetHrSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hr
-        fields = ["user", "company"]
+        fields = ["user", "company","email","mobile_number","designation","preposting_person_name","hr_groups", "profile_pic"]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -50,26 +50,28 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class HrSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
-    password = serializers.CharField()
-    confirm_password = serializers.CharField()
-    company = serializers.IntegerField()
-
     def create(self, validated_data):
 
         instance = create_user(validated_data)
         
         if instance:
             hr_data = {
-                "user_id": instance.id,
-                "company_id": int(validated_data.get("company", ""))
+                "user": instance,
+                "company": validated_data.get("company", ""),
+                "email": validated_data.get('gmail'),
+                "mobile_number": int(validated_data.get('mobile_number')),
+                "designation": validated_data.get('designation'),
+                "preposting_person_name": validated_data.get('preposting_person_name'),
+                "profile_pic": validated_data.get('profile_pic'),
             }
             hr = Hr.objects.create(**hr_data)
-        return instance
+            if hr:
+                hr.groups.add(validated_data.get('groups')[0].id)
+            return hr
     
     class Meta:
         model = Hr
-        fields = ["email", "password", "confirm_password", "company"]
+        fields = ["id", "company","email","mobile_number", "designation", "preposting_person_name", "groups"]
 
 
 class CandidateSerializer(serializers.ModelSerializer):
@@ -111,3 +113,4 @@ class HRGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = HRGroup
         fields = ["id", "group_id", "group_name", "created_at", "modified_at"]
+        

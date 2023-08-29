@@ -5,7 +5,16 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Profile, Hr, Candidate, CompanysCandidates, HRGroup
-from .serializers import GetProfileSerializer, ProfileSerializer, HrSerializer, GetHrSerializer, CandidateSerializer, GetCandidateSerializer, HRGroupSerializer
+from .serializers import( 
+    GetProfileSerializer, 
+    ProfileSerializer, 
+    HrSerializer, 
+    GetHrSerializer, 
+    CandidateSerializer, 
+    GetCandidateSerializer, 
+    HRGroupSerializer, 
+    HrSerializer,
+)
 from company.models import Company
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -225,3 +234,119 @@ class HRGroupDetailApiView(APIView):
             "message" : "HRGroup deleted successfully",
         }
         return Response(response_data, status=status.HTTP_202_ACCEPTED)
+
+
+class HrListApiView(APIView):
+    serializer_class = HrSerializer
+
+    def get(self, request, *args, **kwargs):
+        '''
+        get Hr list
+        '''
+        hr = Hr.objects.all()
+        serializer = HrSerializer(hr, many=True)
+        response_data= {
+            "status" : "success",
+            "message" : "List of Hr ",
+            "data" : serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        Create Hr
+        '''
+        # filter and check email already exits or not
+        email = request.data.get('email')
+
+        existing_user = User.objects.filter(email=email).exists()
+        if existing_user:
+            return Response({'detail': 'User with this email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = HrSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            response_data = {
+                "status" : "success",
+                "message" : "Hr Created Successfully",
+                "data" : serializer.data
+            }
+            return Response(response_data)
+        else:
+            response_data = {
+                "status" : "Failed",
+                "message" : "Please enter valid data"
+            }
+            message = serializer.errors
+            return Response(response_data, status= status.HTTP_404_NOT_FOUND)
+
+
+class HrDetailApiView(APIView):
+    serializer_class = HrSerializer
+
+    def get(self, request, pk=None):
+        '''
+        get single Hr detail
+        '''
+        if pk:
+            try:
+                hr = Hr.objects.get(pk=pk)
+            except:
+                message = "Data Not Found"
+                return Response(message, status=status.HTTP_404_NOT_FOUND)
+
+            if hr:
+                serializer = HrSerializer(hr)
+                response_data = {
+                    "status" : "success",
+                    "message" : "Hr retrived Successfully",
+                    "data" : serializer.data
+                }
+                return Response(response_data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            response_data = {
+                "status" : "Failed",
+                "message" : "Invalid Data",
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk=None):
+        '''
+        update Hr
+        '''
+        try:
+            hr = Hr.objects.get(pk=pk)
+        except:
+            return Response({"error" : "Hr not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        data = HrSerializer(instance= hr, data= request.data)
+        if data.is_valid():
+            data.save()
+            response_data ={
+                "status": "success",
+                "message" : "Hr Updated successfully",
+                "data" : data.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+        else:
+            response_data = {
+                "status" : "Failed",
+                "message" : "Data not Found",
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)   
+
+    def delete(sef, request, pk=None):
+        '''
+        delete Hr
+        '''
+        hr = get_object_or_404(Hr, pk=pk)
+        hr.delete()
+        response_data = {
+            "status" : "success",
+            "message" : "Hr deleted successfully",
+        }
+        return Response(response_data, status=status.HTTP_202_ACCEPTED)
+
+

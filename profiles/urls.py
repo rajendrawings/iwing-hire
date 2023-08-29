@@ -4,7 +4,9 @@ from .views import (
     ProfileDetailApiView,
     CandidateApiView,
     HRGroupListApiView,
-    HRGroupDetailApiView
+    HRGroupDetailApiView,
+    HrListApiView,
+    HrDetailApiView,
 )
 
 urlpatterns = [
@@ -15,4 +17,9 @@ urlpatterns = [
     # For Hr_Group
     path('hr-group/', HRGroupListApiView.as_view()),
     path('hr-group/<int:pk>',HRGroupDetailApiView.as_view()),
+
+    # for Hr
+    path('hr', HrListApiView.as_view()),
+    path('hr/<int:pk>', HrDetailApiView.as_view()),
+
 ]
