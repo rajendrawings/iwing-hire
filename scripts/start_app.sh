@@ -3,10 +3,11 @@
 sed -i 's/\[]/\["54.144.250.113"]/' /home/ubuntu/iwinghire/iwinghire/settings.py
 
 
+cd /home/ubuntu/iwinghire
 
 python manage.py migrate 
 python manage.py makemigrations     
-python manage.py collectstatic
+python manage.py collectstatic --noinput
 sudo service gunicorn restart
 sudo service nginx restart
 #sudo tail -f /var/log/nginx/error.log
