@@ -30,17 +30,17 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-}
-
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'IwingHire APIS',
-    'DESCRIPTION': 'IwingHire project description',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False
-}
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+# }
+#
+# SPECTACULAR_SETTINGS = {
+#     'TITLE': 'IwingHire APIS',
+#     'DESCRIPTION': 'IwingHire project description',
+#     'VERSION': '1.0.0',
+#     'SERVE_INCLUDE_SCHEMA': False
+# }
 
 ROOT_URLCONF = 'iwinghire.urls'
 

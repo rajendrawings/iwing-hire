@@ -27,11 +27,17 @@ from.models import Job
 from.models import Interviewer
 import pandas as pd
 import uuid
+from drf_yasg.utils import swagger_auto_schema
+
 
 #Board views
 class BoardApiView(APIView):
     serializer_class = BoardSerializer
     permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(
+        tags=['Board'],
+    )
     def get(self, request, *args, **kwargs):
         '''
         Get Board List
@@ -45,6 +51,9 @@ class BoardApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Board'],
+    )
     def post(self, request, *args, **kwargs):
         '''
          Post data
@@ -61,11 +70,14 @@ class BoardApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    
+
 class BoardDetailApiView(APIView):
     serializer_class = BoardSerializer
     permission_classes = (IsAuthenticated,)
-    
+
+    @swagger_auto_schema(
+        tags=['Board'],
+    )
     def get(self, request, pk=None):
         '''
         get single board
@@ -89,6 +101,9 @@ class BoardDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Board'],
+    )
     def put(self, request, pk=None):
         '''
         update Board
@@ -106,6 +121,9 @@ class BoardDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Board'],
+    )
     def delete(self, request, pk=None):
         '''
         delete board

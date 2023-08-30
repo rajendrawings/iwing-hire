@@ -13,7 +13,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'profiles',
     'company',
-    'task'
+    'task',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [

@@ -10,16 +10,16 @@ from .views import (
 )
 
 urlpatterns = [
-    path('profile', ProfileApiView.as_view()),
-    path('profile-details', ProfileDetailApiView.as_view()),
-    path('add-candidate', CandidateApiView.as_view()),
+    path('profile/profile', ProfileApiView.as_view()),
+    path('profile/profile-details', ProfileDetailApiView.as_view()),
+    path('profile/add-candidate', CandidateApiView.as_view()),
 
     # For Hr_Group
-    path('hr-group/', HRGroupListApiView.as_view()),
-    path('hr-group/<int:pk>',HRGroupDetailApiView.as_view()),
+    path('profile/hr-group/', HRGroupListApiView.as_view()),
+    path('profile/hr-group/<int:pk>',HRGroupDetailApiView.as_view()),
 
     # for Hr
-    path('hr', HrListApiView.as_view()),
-    path('hr/<int:pk>', HrDetailApiView.as_view()),
+    path('profile/hr', HrListApiView.as_view()),
+    path('profile/hr/<int:pk>', HrDetailApiView.as_view()),
 
 ]
