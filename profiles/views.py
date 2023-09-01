@@ -19,12 +19,17 @@ from company.models import Company
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
+
 
 
 class ProfileDetailApiView(APIView):
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        tags=['Profile'],
+    )
     # 1. Get Details
     def get(self, request, *args, **kwargs):
         '''
@@ -55,6 +60,9 @@ class ProfileDetailApiView(APIView):
 class ProfileApiView(APIView):
     serializer_class = ProfileSerializer
 
+    @swagger_auto_schema(
+        tags=['Profile'],
+    )
     # 2. Create
     def post(self, request, *args, **kwargs):
         '''
@@ -90,6 +98,9 @@ class CandidateApiView(APIView):
     serializer_class = CandidateSerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        tags=['Candidate'],
+    )
     # 2. Create
     def post(self, request, *args, **kwargs):
         '''
@@ -140,7 +151,9 @@ class CandidateApiView(APIView):
 class HRGroupListApiView(APIView):
     serializer_class = HRGroupSerializer
 
-
+    @swagger_auto_schema(
+        tags=['HRGroup'],
+    )
     def get(self, request, *args, **kwargs):
         '''
         get Hr Group list
@@ -154,6 +167,9 @@ class HRGroupListApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['HRGroup'],
+    )
     def post(self, request, *args, **Kwargs):
         '''
         create HRGroup 
@@ -175,6 +191,9 @@ class HRGroupListApiView(APIView):
 class HRGroupDetailApiView(APIView):
     serializer_class= HRGroupSerializer
 
+    @swagger_auto_schema(
+        tags=['HRGroup'],
+    )
     def get(self, request, pk=None):
         '''
         get single Hr-Group
@@ -200,6 +219,9 @@ class HRGroupDetailApiView(APIView):
             message= "Invalid data"
             return Response (message, status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['HRGroup'],
+    )
     def put(self, request, pk=None):
         '''
         Update data
@@ -223,6 +245,9 @@ class HRGroupDetailApiView(APIView):
             message= "data not found"
             return Response(message,status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['HRGroup'],
+    )
     def delete(self, request,pk=None):
         '''
         delete Hr-Group
@@ -239,6 +264,9 @@ class HRGroupDetailApiView(APIView):
 class HrListApiView(APIView):
     serializer_class = HrSerializer
 
+    @swagger_auto_schema(
+        tags=['Hr'],
+    )
     def get(self, request, *args, **kwargs):
         '''
         get Hr list
@@ -252,6 +280,9 @@ class HrListApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Hr'],
+    )
     def post(self, request, *args, **kwargs):
         '''
         Create Hr
@@ -284,6 +315,9 @@ class HrListApiView(APIView):
 class HrDetailApiView(APIView):
     serializer_class = HrSerializer
 
+    @swagger_auto_schema(
+        tags=['Hr'],
+    )
     def get(self, request, pk=None):
         '''
         get single Hr detail
@@ -312,6 +346,9 @@ class HrDetailApiView(APIView):
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Hr'],
+    )
     def put(self, request, pk=None):
         '''
         update Hr
@@ -337,6 +374,9 @@ class HrDetailApiView(APIView):
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)   
 
+    @swagger_auto_schema(
+        tags=['Hr'],
+    )
     def delete(sef, request, pk=None):
         '''
         delete Hr

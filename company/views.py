@@ -7,11 +7,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from .models import Company, Subscription, CompanySubscription
 from .serializers import CompanySerializer, SubscriptionSerializer, CompanySubscriptionSerializer
+from drf_yasg.utils import swagger_auto_schema
 
 class CompanyListApiView(APIView):
     serializer_class = CompanySerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        tags=['Company'],
+    )
     # 1. List all
     def get(self, request, *args, **kwargs):
         '''
@@ -26,6 +30,9 @@ class CompanyListApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Company'],
+    )
     # 2. Create
     def post(self,request, *args, **kwargs):
         '''
@@ -49,7 +56,10 @@ class CompanyListApiView(APIView):
 class SubscriptionListApiView(APIView):
     
     serializer_class = SubscriptionSerializer
-
+ 
+    @swagger_auto_schema(
+        tags=['Subscription'],
+    )
     def get(self, request, *args, **kwargs):
         '''
         Get Subscriptions List
@@ -63,6 +73,9 @@ class SubscriptionListApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Subscription'],
+    )
     def post(self, request, *args, **kwargs):
         '''
         post subscription data
@@ -85,6 +98,9 @@ class SubscriptionListApiView(APIView):
 class SubscriptionDetailApiView(APIView):
     serializer_class = SubscriptionSerializer
 
+    @swagger_auto_schema(
+        tags=['Subscription'],
+    )
     def get(self, request, pk=None):
         '''
         get single subscription
@@ -107,7 +123,10 @@ class SubscriptionDetailApiView(APIView):
                 return Response(status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
+    
+    @swagger_auto_schema(
+        tags=['Subscription'],
+    )
     def put(self, request, pk=None):
         '''
         update subscription
@@ -125,6 +144,9 @@ class SubscriptionDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Subscription'],
+    )
     def delete(self, request,pk=None):
         '''
         delete subscription
@@ -141,6 +163,9 @@ class SubscriptionDetailApiView(APIView):
 class CompanySubscriptionListAPIView(APIView):
     serializer_class = CompanySubscriptionSerializer
 
+    @swagger_auto_schema(
+        tags=['CompanySubscription'],
+    )
     def get (self, request, *args, **kwargs):
         '''
         List all the company subscription 
@@ -154,6 +179,9 @@ class CompanySubscriptionListAPIView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['CompanySubscription'],
+    )
     def post(self, request, *args, **kwargs):
         '''
         post companysubscription data
