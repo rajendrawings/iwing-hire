@@ -141,7 +141,10 @@ class BoardDetailApiView(APIView):
 class CardApiView(APIView):
     serializer_class = CardSerializer
     permission_classes = (IsAuthenticated,)
-    
+
+    @swagger_auto_schema(
+        tags=['Card'],
+    )
     def get(self, request, *args, **kwargs):
         '''
         Get card List
@@ -155,6 +158,9 @@ class CardApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Card'],
+    )
     def post(self, request, *args, **kwargs):
         '''
          Post data
@@ -176,6 +182,9 @@ class CardDetailApiView(APIView):
     serializer_class = CardSerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        tags=['Card'],
+    )
     def get(self, request, pk=None):
         '''
         get single card
@@ -199,6 +208,9 @@ class CardDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Card'],
+    )
     def put(self, request, pk=None):
         '''
         update card
@@ -216,6 +228,9 @@ class CardDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Card'],
+    )
     def delete(self, request, pk=None):
         '''
         delete card
@@ -233,7 +248,11 @@ class CardDetailApiView(APIView):
 class TaskApiView(APIView):
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated,)
-    
+
+
+    @swagger_auto_schema(
+        tags=['Task',]
+    )
     def get(self, request, *args, **kwargs):
         '''
         Get Task List
@@ -247,6 +266,9 @@ class TaskApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Task'],
+    )
     def post(self, request, *args, **kwargs):
         '''
          Post Task data
@@ -268,6 +290,9 @@ class TaskDetailApiView(APIView):
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated,)
     
+    @swagger_auto_schema(
+        tags=['Task'],
+    )
     def get(self, request, pk=None):
         '''
         get single Task
@@ -292,6 +317,9 @@ class TaskDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Task'],
+    )
     def put(self, request, pk=None):
         '''
         update Task
@@ -308,7 +336,10 @@ class TaskDetailApiView(APIView):
             return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
+ 
+    @swagger_auto_schema(
+        tags=['Task'],
+    )
     def delete(self, request, pk=None):
         '''
         delete Task
@@ -326,7 +357,10 @@ class TaskDetailApiView(APIView):
 class ActivityApiView(APIView):
     serializer_class = ActivitySerializer
     permission_classes = (IsAuthenticated,)
-    
+
+    @swagger_auto_schema(
+        tags=['Activity'],
+    )
     def get(self, request, *args, **kwargs):
         '''
         Get Activity List
@@ -340,6 +374,9 @@ class ActivityApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Activity'],
+    )
     def post(self, request, *args, **kwargs):
         '''
          Post  Activity data
@@ -363,6 +400,9 @@ class ActivityDetailApiView(APIView):
     serializer_class = ActivitySerializer
     permission_classes = (IsAuthenticated,)
     
+    @swagger_auto_schema(
+        tags=['Activity'],
+    )
     def get(self, request, pk=None):
         '''
         get single Activity
@@ -387,6 +427,9 @@ class ActivityDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Activity'],
+    )
     def put(self, request, pk=None):
         '''
         update Activity
@@ -403,7 +446,10 @@ class ActivityDetailApiView(APIView):
             return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
+    
+    @swagger_auto_schema(
+        tags=['Activity'],
+    )
     def delete(self, request, pk=None):
         '''
         delete Activity
@@ -422,6 +468,9 @@ class JobApiView(APIView):
     serializer_class = JobSerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        tags=['Job'],
+    )
     def get(self, request, *args, **kwargs):
         '''
         Get Job List
@@ -435,6 +484,9 @@ class JobApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Job'],
+    )
     def post(self, request, *args, **kwargs):
         '''
         Post  Job data
@@ -470,6 +522,9 @@ class JobDetailApiView(APIView):
     serializer_class = JobSerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        tags=['Job'],
+    )
     def get(self, request, pk=None):
         '''
         get single Job
@@ -493,6 +548,9 @@ class JobDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Job'],
+    )
     def put(self, request, pk=None):
         '''
         update Job
@@ -510,6 +568,9 @@ class JobDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Job'],
+    )
     def delete(self, request, pk=None):
         '''
         delete job
@@ -527,6 +588,9 @@ class InterviewerApiView(APIView):
     serializer_class = InterviewerSerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        tags=['Interview'],
+    )
     def get(self, request, *args, **kwargs):
         '''
         Get Interviewer List
@@ -540,6 +604,9 @@ class InterviewerApiView(APIView):
         }
         return Response(response_data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=['Interview'],
+    )
     def post(self, request, *args, **kwargs):
         '''
         post interviewer data
@@ -561,6 +628,9 @@ class InterviewerApiView(APIView):
 class InterviewerImportAPI(APIView):
     serializer_class = InterviewerSerializer1
 
+    @swagger_auto_schema(
+        tags=['Interview'],
+    )
     def post(self, request, *args, **kwargs):
         company_id = request.data.get('company', None)
         file = request.FILES.get('file')
@@ -598,11 +668,13 @@ class InterviewerImportAPI(APIView):
             return Response({"error":str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
-
 class InterviewerDetailApiView(APIView):
     serializer_class = InterviewerSerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        tags=['Interview'],
+    )
     def get(self, request, pk=None):
         '''
         get single interviewer
@@ -626,6 +698,9 @@ class InterviewerDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Inteview'],
+    )
     def put(self, request, pk=None):
         '''
         update interviewer
@@ -643,6 +718,9 @@ class InterviewerDetailApiView(APIView):
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @swagger_auto_schema(
+        tags=['Interview'],
+    )
     def delete(self, request,pk=None):
         '''
         delete interviewer
