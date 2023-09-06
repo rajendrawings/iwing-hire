@@ -15,66 +15,29 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from rest_framework import permissions
+"Test"
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+from django.urls import path, include
 from django.contrib import admin
-from django.conf import settings
-from django.urls import path, re_path, include
-from django.conf.urls.static import static
-
-from task import urls as task_api
 from company import urls as company_api
 from profiles import urls as profile_api
-
-
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Your API",
-        default_version='v1',
-        description="Your API description",
-        terms_of_service="https://www.yourapp.com/terms/",
-        contact=openapi.Contact(email="contact@yourapp.com"),
-        license=openapi.License(name="Your License"),
-    ),
-    public=True,
-    permission_classes=[permissions.AllowAny],
-)
-
+from task import urls as task_api
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('api/v1/', include(company_api)),
-    path('api/v1/', include(profile_api)),
-    path('api/v1/', include(task_api)),
-    re_path(
-      r'^swagger(?P<format>\.json|\.yaml)$',
-      schema_view.without_ui(cache_timeout=0),
-      name='schema-json'
-    ),
-    path(
-      'swagger/',
-      schema_view.with_ui('swagger', cache_timeout=0),
-      name='schema-swagger-ui'
-    ),
-    path(
-      'admin/',
-      admin.site.urls
-    ),
-    path(
-      'api/token/',
-      TokenObtainPairView.as_view(),
-      name='token_obtain_pair'
-    ),
-    path(
-      'api/token/refresh/',
-      TokenRefreshView.as_view(),
-      name='token_refresh'
-    )
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path('admin/', admin.site.urls),
+                  path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+                  path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+                  path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+                  path('api/schema///', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+                  path('company/', include(company_api)),
+                  path('profile/', include(profile_api)),
+                  path('task/', include(task_api)),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
